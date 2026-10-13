@@ -1,93 +1,65 @@
-# Payoo App
+# Payoo — Digital Wallet Demo
 
-A mobile-style digital wallet demo built with HTML, Tailwind CSS and vanilla JavaScript. It explores common wallet interactions through separate, easy-to-follow pages.
+A responsive portfolio project built with HTML, CSS and vanilla JavaScript. No runtime packages, external fonts, CDN scripts or backend are required.
 
-> **Learning / portfolio demo:** This app does not connect to a bank or payment service. Login, balances and transactions are simulated in the browser. Do not enter real account details or PINs.
+## Start locally
 
-![Payoo app preview](payoo.png)
+Requires Node.js 20 or later for development commands. No dependency installation is necessary.
+
+```sh
+npm test
+npm run build
+npm start
+```
+
+Open http://localhost:3017. Re-run the build and reload the browser after editing source files.
+
+Demo number: **01700000000**. Demo PIN: **1234**. Any valid-format dummy Bangladesh mobile number (11 digits, beginning 013–019) has its own wallet, initially **BDT 45,000.00**. Do not use real financial details.
 
 ## Features
 
-- Mobile number and PIN login screen
-- Dashboard with wallet service shortcuts
-- Add money and cashout interfaces
-- Money transfer and bill payment interfaces
-- Coupon-based bonus demo
-- Mobile-focused UI styled with Tailwind CSS
+- Responsive login, dashboard and six wallet service pages.
+- Persistent per-account balances, including zero balances.
+- Add money, cashout, transfer, bill payment and bonuses.
+- One-time BONUS100 and BONUS500 coupons per demo wallet.
+- Saved transaction history, newest first, with a recent activity dashboard.
+- Amounts stored as integer paisa to avoid floating-point balance errors.
+- PIN, recipient, bank, bill account and sufficient-balance validation.
+- Demo session expires after eight hours; logout clears the tab's session.
+- Accessible labels, native links/buttons, keyboard focus states and inline status messages.
 
-## Tech stack
+## Deploy
 
-- HTML5
-- Tailwind CSS (CDN)
-- Vanilla JavaScript and DOM events
-- Browser localStorage (used by transfer, bill payment and bonus pages)
+Deploy **only the contents of `dist/`** after running `npm test && npm run build`.
 
-## Run locally
+- **Netlify:** import the source repository; `netlify.toml` defines the build command and publish directory. Alternatively upload the built `dist` folder.
+- **Vercel:** import the source repository; `vercel.json` specifies the static build and output directory.
+- **GitHub Pages or another static host:** publish the files inside `dist` with `index.html` at the deployment root. All asset and page links are relative, so project subdirectories work.
 
-No package installation or build step is required.
+No environment variables or payment keys are needed. Use HTTPS. Netlify and Vercel configurations include response security headers. Other hosts may require configuring equivalent headers separately. A custom `404.html` is included.
 
-```bash
-git clone https://github.com/the3zer0/Payoo-app.git
-cd Payoo-app
-```
+The deployment ZIP contains the built site's contents at its root. Unzip and upload those files. Do not publish `work/`, which contains an original-source backup.
 
-Serve the folder using VS Code Live Server, or Python if installed:
+## Data and limitations
 
-```bash
-python -m http.server 5500
-```
+This is a **simulated wallet for learning and portfolio use**, not a real MFS/payment platform. No money is sent, bank ownership is not checked, and the PIN is public demo logic. Client-side route checks are a convenience, not a security boundary.
 
-Open **http://localhost:5500**. Internet access is needed for the Tailwind CDN. Keep the same hostname and port while testing because localStorage is scoped to the site origin.
+Wallets are stored in localStorage under `payoo:wallet:<mobile>`; sessions are in sessionStorage. Data persists in the same browser/origin, is not synced across devices, and can be changed or cleared by the browser user. Original unscoped `balance` data is not imported because it has no account identity. Clear site storage to reset the demo. Web Locks serializes same-wallet writes across tabs in supported browsers; older browsers use a best-effort synchronous fallback. Storage failures are reported instead of displaying a false success.
 
-## Try the demo
+Real financial use requires a secure backend, verified identities, server-side authorization and a ledger, auditability, and payment-provider integration.
 
-1. Enter a dummy mobile number and PIN `1234` on the login screen.
-2. Open a wallet service from the dashboard.
-3. Use PIN `1234` for add money, cashout, transfer and bill payment.
-4. Try coupon `BONUS100` or `BONUS500` on the bonus page.
+## Validation
 
-The intended starting demo balance is **45,000**, displayed with a dollar sign. The login screen currently accepts any nonempty mobile value and any four-digit PIN; money actions specifically require `1234`.
+`npm test` covers balances, zero preservation, account isolation, all wallet flows, duplicate coupons, invalid inputs, insufficient funds, and storage failures. Browser checks covered all wallet pages at 320px, 768px and 1440px, plus deposit/reload, transfer to zero, coupon reuse prevention, cashout, bill payment and history.
 
-## Project structure
+## Files
 
-```text
-Payoo-app/
-├── index.html          # Login screen
-├── dashboard.html      # Dashboard and static payment examples
-├── addmoney.html       # Add money
-├── cashout.html        # Cashout
-├── transfer.html       # Transfer money
-├── getbonus.html       # Coupon bonus
-├── paybill.html        # Bill payment
-├── js/                 # Page-specific event handlers
-├── assets/             # Icons and background images
-├── payoo.png           # Project preview
-└── README.md
-```
-
-## Current limitations / review findings
-
-These issues exist in the current application; adding this README does not fix them.
-
-- **Balances are inconsistent across pages.** Add money and cashout start from 45,000 on every load and do not persist changes. The dashboard displays a hardcoded balance. Other pages use localStorage.
-- **Zero balance is incorrectly reset.** Transfer, bill payment and bonus use `parseFloat(value) || 45000`, which treats a valid zero as missing data.
-- **Two dashboard actions are broken.** The logo and Transactions tile call `goDashboardNoActive()` and `goToDashboardWithActive()`, but neither function is defined.
-- **Authentication is only a demo.** There is no server, authenticated session or route protection; dashboard pages can be opened directly. Logout only navigates to the login page.
-- **Payment details are not validated or processed.** Bank, account, agent and recipient fields do not participate in the JavaScript transaction logic.
-- **Transaction history is static.** The Latest Payment cards are examples and are not generated from money actions.
-- **Coupons can be redeemed repeatedly.** There is no redemption tracking.
-- **Money validation needs strengthening.** Use finite numbers, sensible bounds and integer minor units rather than unrestricted floating-point arithmetic.
-- **Accessibility can be improved.** Replace clickable navigation divs with links/buttons and associate labels with inputs.
-
-## Suggested next steps
-
-1. Share one balance and transaction store across all pages; preserve zero correctly.
-2. Record transactions and render real demo history on the dashboard.
-3. Fix dashboard navigation and validate all required form fields.
-4. Add one-time coupon redemption and consistent demo login behavior.
-5. Add regression tests for reloads, page transitions, insufficient funds and zero balance.
-6. For a real payment product, implement server-side authentication, authorization, validation and a verified payment provider integration. Browser storage is not a trusted financial ledger.
-
-## Author
-
-**Md Rahat Mahmud** — [GitHub](https://github.com/the3zer0) · [LinkedIn](https://www.linkedin.com/in/mahmud3zer0)
+- `*.html`: deployable page source
+- `css/styles.css`: shared responsive styles
+- `js/wallet.js`: testable wallet storage and transaction logic
+- `js/app.js`: UI, session and form handling
+- `scripts/build.cjs`: static output builder
+- `scripts/serve.cjs`: loopback-only development preview
+- `scripts/generate.cjs`: shared page template generator (rerunning overwrites the generated HTML pages)
+- `tests/wallet.test.cjs`: Node test suite
+- `work/original/`: original files retained before changes
