@@ -1,65 +1,138 @@
-# Payoo — Digital Wallet Demo
+<div align="center">
 
-A responsive portfolio project built with HTML, CSS and vanilla JavaScript. No runtime packages, external fonts, CDN scripts or backend are required.
+# Payoo · Digital Wallet Demo
 
-## Start locally
+**A responsive, browser-based digital wallet simulator built with vanilla JavaScript.**
 
-Requires Node.js 20 or later for development commands. No dependency installation is necessary.
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 
-```sh
+**[🌐 Live Demo](https://payoomobileapp-orcin.vercel.app) · [💻 Source Code](https://github.com/the3zer0/Payoo-app)**
+
+</div>
+
+---
+
+## Overview
+
+**Payoo** is a fintech-inspired **portfolio and learning project**. It simulates everyday wallet operations in the browser: adding money, cashing out, transferring funds, paying bills, applying bonuses, and reviewing transactions.
+
+It is a **demo only**. It does **not** connect to banks or payment services and must not be used with actual money or personal financial details.
+
+![Payoo project visual](./payoo.png)
+
+## Features
+
+- Responsive login, dashboard, and wallet-service pages.
+- Add money, cash out, transfer funds, and pay bills.
+- Apply one-time `BONUS100` and `BONUS500` promo codes per demo wallet.
+- Review transaction history, with latest activity first.
+- Persistent **per-demo-number** balances using `localStorage`.
+- Session handling with `sessionStorage` and an eight-hour session expiry.
+- Validation for account numbers, PINs, amounts, billing data, and available balance.
+- Store money as **integer paisa** to avoid floating-point rounding errors.
+- Keyboard-accessible controls, labels, focus states, and inline feedback.
+- Tests for wallet logic, including invalid transactions and zero balances.
+
+## Tech stack
+
+| Area | Technology |
+| --- | --- |
+| Interface | Semantic HTML5, CSS3 |
+| Application logic | Vanilla JavaScript |
+| Persistence | Browser `localStorage` and `sessionStorage` |
+| Local tooling | Node.js 20+ and built-in Node test runner |
+| Bundling | Custom Node.js build script (no framework/runtime packages) |
+| Hosting | Static hosting; Netlify/Vercel configurations included |
+
+**Dependencies:** `package.json` declares **no npm runtime dependencies or devDependencies**. Development tasks use Node.js built-in functionality, so `npm install` is not required.
+
+## Getting started
+
+**Prerequisite:** Node.js **20 or newer**.
+
+```bash
+git clone https://github.com/the3zer0/Payoo-app.git
+cd Payoo-app
+
 npm test
 npm run build
 npm start
 ```
 
-Open http://localhost:3017. Re-run the build and reload the browser after editing source files.
+Open **http://localhost:3017**. If you modify a source file, rebuild with `npm run build` before reloading the preview.
 
-Demo number: **01700000000**. Demo PIN: **1234**. Any valid-format dummy Bangladesh mobile number (11 digits, beginning 013–019) has its own wallet, initially **BDT 45,000.00**. Do not use real financial details.
+### Demo credentials
 
-## Features
+| Item | Demo value |
+| --- | --- |
+| Phone number | `01700000000` |
+| PIN | `1234` |
 
-- Responsive login, dashboard and six wallet service pages.
-- Persistent per-account balances, including zero balances.
-- Add money, cashout, transfer, bill payment and bonuses.
-- One-time BONUS100 and BONUS500 coupons per demo wallet.
-- Saved transaction history, newest first, with a recent activity dashboard.
-- Amounts stored as integer paisa to avoid floating-point balance errors.
-- PIN, recipient, bank, bill account and sufficient-balance validation.
-- Demo session expires after eight hours; logout clears the tab's session.
-- Accessible labels, native links/buttons, keyboard focus states and inline status messages.
+You can also use a dummy Bangladesh mobile number that starts with `013`–`019` and has 11 digits. Each demo number starts with **BDT 45,000.00** and maintains its own local browser wallet.
 
-## Deploy
+> Never enter a real PIN, bank account number, or sensitive financial information. The demo PIN is intentionally public and provides **no real security**.
 
-Deploy **only the contents of `dist/`** after running `npm test && npm run build`.
+## Available commands
 
-- **Netlify:** import the source repository; `netlify.toml` defines the build command and publish directory. Alternatively upload the built `dist` folder.
-- **Vercel:** import the source repository; `vercel.json` specifies the static build and output directory.
-- **GitHub Pages or another static host:** publish the files inside `dist` with `index.html` at the deployment root. All asset and page links are relative, so project subdirectories work.
+| Command | Purpose |
+| --- | --- |
+| `npm test` | Run wallet logic tests using Node's built-in test runner |
+| `npm run build` | Generate deployable static files in `dist/` |
+| `npm start` | Serve the generated `dist/` directory locally |
 
-No environment variables or payment keys are needed. Use HTTPS. Netlify and Vercel configurations include response security headers. Other hosts may require configuring equivalent headers separately. A custom `404.html` is included.
+The local preview defaults to port **3017**; the script also supports a `PORT` environment variable.
 
-The deployment ZIP contains the built site's contents at its root. Unzip and upload those files. Do not publish `work/`, which contains an original-source backup.
+## Project structure
 
-## Data and limitations
+```text
+index.html             Login / entry page
+dashboard.html         Wallet overview
+addmoney.html          Add-money flow
+cashout.html           Cash-out flow
+transfer.html          Transfer flow
+paybill.html           Bill-payment flow
+getbonus.html          Promo-code flow
+transactions.html      Transaction history
+css/styles.css         Shared responsive styling
+js/wallet.js           Wallet data and transaction logic
+js/app.js              UI and browser session logic
+scripts/build.cjs      Static build
+scripts/serve.cjs      Local preview server
+tests/wallet.test.cjs  Wallet behavior tests
+netlify.toml           Netlify configuration
+vercel.json            Vercel configuration
+```
 
-This is a **simulated wallet for learning and portfolio use**, not a real MFS/payment platform. No money is sent, bank ownership is not checked, and the PIN is public demo logic. Client-side route checks are a convenience, not a security boundary.
+## Deployment
 
-Wallets are stored in localStorage under `payoo:wallet:<mobile>`; sessions are in sessionStorage. Data persists in the same browser/origin, is not synced across devices, and can be changed or cleared by the browser user. Original unscoped `balance` data is not imported because it has no account identity. Clear site storage to reset the demo. Web Locks serializes same-wallet writes across tabs in supported browsers; older browsers use a best-effort synchronous fallback. Storage failures are reported instead of displaying a false success.
+The project builds to a **static `dist/` directory**. Publish **the contents of `dist/`**, not the original source tree.
 
-Real financial use requires a secure backend, verified identities, server-side authorization and a ledger, auditability, and payment-provider integration.
+- **Vercel:** Import the repository; its `vercel.json` contains static build/output settings.
+- **Netlify:** Import the repository; `netlify.toml` provides build and publish settings.
+- **Other static hosting:** Run `npm test && npm run build`, then upload the generated files in `dist/`.
 
-## Validation
+There are no backend credentials or environment variables required for the demo.
 
-`npm test` covers balances, zero preservation, account isolation, all wallet flows, duplicate coupons, invalid inputs, insufficient funds, and storage failures. Browser checks covered all wallet pages at 320px, 768px and 1440px, plus deposit/reload, transfer to zero, coupon reuse prevention, cashout, bill payment and history.
+**Live site:** https://payoomobileapp-orcin.vercel.app
 
-## Files
+## Data handling and limitations
 
-- `*.html`: deployable page source
-- `css/styles.css`: shared responsive styles
-- `js/wallet.js`: testable wallet storage and transaction logic
-- `js/app.js`: UI, session and form handling
-- `scripts/build.cjs`: static output builder
-- `scripts/serve.cjs`: loopback-only development preview
-- `scripts/generate.cjs`: shared page template generator (rerunning overwrites the generated HTML pages)
-- `tests/wallet.test.cjs`: Node test suite
-- `work/original/`: original files retained before changes
+- Transactions are **simulated**; no actual funds are transferred.
+- Wallet state lives in `localStorage` and is specific to the browser and site origin.
+- Sessions are kept in `sessionStorage`; data does not sync across devices.
+- Clearing browser storage removes local demo history and balances.
+- Client-side PIN checks and navigation restrictions are **not security boundaries**.
+- A real money product would require identity verification, secure server-side authorization, a durable ledger, and regulated payment integrations.
+
+## Testing
+
+`npm test` exercises balance calculations, account separation, transfers, bills, one-time coupons, insufficient funds, and invalid inputs. There is no external test framework to install.
+
+## Author
+
+Built by [Md Rahat Mahmud](https://github.com/the3zer0) for learning and portfolio demonstration.
+
+[Try Payoo →](https://payoomobileapp-orcin.vercel.app)
